@@ -1,5 +1,6 @@
 import wait from "@/lib/wait";
 import React from "react";
+import Card from "./components/Card";
 
 export async function getUses() {
   const response = await fetch(
@@ -20,13 +21,17 @@ export async function getUses() {
 export default async function page() {
   const uses = await getUses();
 
-  wait(10000);
-
   console.log(uses);
 
   return (
     <div>
-      <>this is use page</>
+      {uses.data.map(
+        // @ts-ignore
+        (item, index) => {
+          // eslint-disable-next-line react/jsx-key
+          return <Card index={index} title={""} description={""} image={""} />;
+        }
+      )}
     </div>
   );
 }
