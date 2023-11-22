@@ -1,7 +1,5 @@
 import React from "react";
 
-export async function getBlogs() {}
-
 export default function page() {
-  return <div>page</div>;
+  return <div>this is dashboard use page</div>;
 }
