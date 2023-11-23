@@ -16,7 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="container mx-auto">
+          <div>this is will be the navbar</div>
+          {children}
+          <div>this is will be the footer</div>
+        </div>
+      </body>
     </html>
   );
 }
