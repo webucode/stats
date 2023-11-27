@@ -29,7 +29,15 @@ export default async function page() {
         // @ts-ignore
         (item, index) => {
           // eslint-disable-next-line react/jsx-key
-          return <Card index={index} title={""} description={""} image={""} />;
+          return (
+            <Card
+              index={index}
+              title={""}
+              description={""}
+              image={""}
+              key={index}
+            />
+          );
         }
       )}
     </div>
