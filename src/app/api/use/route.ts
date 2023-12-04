@@ -5,5 +5,5 @@ export async function GET(request: Request) {
     data: [{ title: "Desk" }, { title: "Microphone" }],
   };
 
-  return Response.json(usesData);
+  return Response.Json(usesData);
 }
