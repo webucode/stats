@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import AppsNavbar from "@/components/AppsNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,8 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="container mx-auto">
-          <div>this is will be the navbar</div>
+        <div className="container mx-auto min-h-full">
+          <AppsNavbar />
           {children}
           <div>this is will be the footer</div>
         </div>

@@ -1,12 +1,9 @@
 import { createClient } from "@/utils/supabase/server";
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { redirect } from "next/navigation";
-import { headers, cookies } from "next/headers";
-import { useState } from "react";
+import { redirect, useRouter } from "next/navigation";
+import { cookies } from "next/headers";
+import SubmitButton from "../components/SubmitButton";
 
 export default async function Page() {
-  const [loading, setLoading] = useState(false);
-
   const signUp = async (formData: FormData) => {
     "use server";
 
@@ -15,7 +12,7 @@ export default async function Page() {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { error } = await supabase.auth.signUp({ email, password });
 
     if (error) {
       return redirect("/register");
@@ -24,13 +21,25 @@ export default async function Page() {
     return redirect("/dashboard");
   };
 
+  const handleSignOut = async () => {
+    "use server";
+
+    const router = useRouter();
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+    await supabase.auth.signOut();
+    return router.refresh();
+  };
+
   return (
     <div>
       sign up form
       <form action={signUp}>
         <input type="email" name="email" placeholder="Email" />
         <input type="password" name="password" placeholder="Password" />
-        <button type="submit">{loading ? "submit" : "loading"}</button>
+        <SubmitButton />
+        <button onClick={handleSignOut}>Sign out</button>
       </form>
     </div>
   );
