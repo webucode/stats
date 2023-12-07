@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import AppsNavbar from "@/components/AppsNavbar";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+import { createClient } from "../utils/supabase/server";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,6 +18,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
   return (
     <html lang="en">
       <body className={inter.className}>

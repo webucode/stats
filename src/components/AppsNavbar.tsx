@@ -4,21 +4,36 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import LogoutButton from "../app/dashboard/components/LogoutButton";
+import SignOutButton from "./Button/SignOutButton";
 
-export default function AppsNavbar() {
-  // const handleSignOut = async () => {
-  //   "use server";
+export default async function AppsNavbar() {
+  const isLoggedIn = async () => {
+    "use server";
 
-  //   const cookieStore = cookies();
-  //   const supabase = createClient(cookieStore);
-  //   const { error } = await supabase.auth.signOut();
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
 
-  //   if (error) {
-  //     return redirect("/dahsboard");
-  //   }
+    const { data, error } = await supabase.auth.getSession();
 
-  //   return redirect("/");
-  // };
+    return data;
+  };
+
+  const signOut = async (formData: FormData) => {
+    "use server";
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+    const { data } = await supabase.auth.getUser();
+
+    console.log(data);
+
+    const { error } = await supabase.auth.signOut();
+
+    console.log(data);
+    console.log("trying to signout");
+
+    return;
+  };
 
   return (
     <nav className="bg-white border-gray-200">
@@ -27,6 +42,13 @@ export default function AppsNavbar() {
           <Link href={"/use"}>use</Link>
           <Link href={"/register"}>register</Link>
           <Link href={"/login"}>login</Link>
+
+          {(await isLoggedIn()) && (
+            <form action={signOut}>
+              <input type="submit" />
+            </form>
+          )}
+
           {/* <button onClick={handleSignOut}>Sign out</button> */}
           {/* <LogoutButton onClick={handleSignOut} /> */}
         </div>

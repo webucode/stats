@@ -21,17 +21,6 @@ export default async function Page() {
     return redirect("/dashboard");
   };
 
-  const handleSignOut = async () => {
-    "use server";
-
-    const router = useRouter();
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    await supabase.auth.signOut();
-    return router.refresh();
-  };
-
   return (
     <div>
       sign up form
@@ -39,7 +28,6 @@ export default async function Page() {
         <input type="email" name="email" placeholder="Email" />
         <input type="password" name="password" placeholder="Password" />
         <SubmitButton />
-        <button onClick={handleSignOut}>Sign out</button>
       </form>
     </div>
   );
