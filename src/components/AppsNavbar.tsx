@@ -5,8 +5,13 @@ import { redirect } from "next/navigation";
 import React from "react";
 import LogoutButton from "../app/dashboard/components/LogoutButton";
 import SignOutButton from "./Button/SignOutButton";
+import { Session } from "@supabase/supabase-js";
 
-export default async function AppsNavbar() {
+export default async function AppsNavbar({
+  session,
+}: {
+  session: Session | null;
+}) {
   const isLoggedIn = async () => {
     "use server";
 
@@ -43,7 +48,7 @@ export default async function AppsNavbar() {
           <Link href={"/register"}>register</Link>
           <Link href={"/login"}>login</Link>
 
-          {(await isLoggedIn()) && (
+          {session && (
             <form action={signOut}>
               <input type="submit" />
             </form>
