@@ -5,6 +5,7 @@ import AppsNavbar from "@/components/AppsNavbar";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { createClient } from "../utils/supabase/server";
+import AuthContext from "@/hooks/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,13 +28,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthContext>
-          <div className="container mx-auto min-h-full">
-            <AppsNavbar session={session} />
-            {children}
-            <div>this is will be the footer</div>
-          </div>
-        </AuthContext>
+        {/* <AuthContext> */}
+        <div className="container mx-auto min-h-full">
+          <AppsNavbar />
+          {children}
+          <div>this is will be the footer</div>
+        </div>
+        {/* </AuthContext> */}
       </body>
     </html>
   );
