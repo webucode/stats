@@ -29,13 +29,13 @@ export default function Page() {
   // };
 
   return (
-    <main className="h-screen flex items-center justify-center bg-gray-800 p-6">
-      sign in form
+    <div className="h-screen flex p-6 flex-col">
+      <div className="block">sign in form</div>
       <form action={signIn}>
         <input type="email" name="email" placeholder="Email" />
         <input type="password" name="password" placeholder="Password" />
         <SubmitButton />
       </form>
-    </main>
+    </div>
   );
 }

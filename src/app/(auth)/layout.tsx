@@ -3,8 +3,10 @@ import React from "react";
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      {children}
-      <div>layout for auth</div>
+      <div className="flex flex-row">
+        <div className="flex-1">layout for auth</div>
+        <div className="flex-1">{children}</div>
+      </div>
     </>
   );
 }
