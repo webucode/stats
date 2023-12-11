@@ -23,7 +23,7 @@ export default async function Page() {
   const { data } = await supabase.auth.getUser();
   console.log(data);
 
-  if (data.user) return <div>anda belum login</div>;
+  if (!data.user) return <div>anda belum login</div>;
 
   return (
     <div>

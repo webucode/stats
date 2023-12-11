@@ -1,31 +1,18 @@
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+
 import React from "react";
-import LogoutButton from "../app/dashboard/components/LogoutButton";
-import SignOutButton from "./Button/SignOutButton";
-import { Session } from "@supabase/supabase-js";
+
+import getActiveUserData from "@/utils/supabase/getActiveUser";
+
+import doSignOut from "@/utils/supabase/doSignOut";
 
 export default async function AppsNavbar() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-
-  const { data, error } = await supabase.auth.getSession();
+  const { data, error } = await getActiveUserData();
 
   const signOut = async (formData: FormData) => {
     "use server";
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
 
-    const { data } = await supabase.auth.getUser();
-
-    console.log(data);
-
-    const { error } = await supabase.auth.signOut();
-
-    console.log(data);
-    console.log("trying to signout");
+    const { error } = await doSignOut();
 
     return;
   };
@@ -40,18 +27,19 @@ export default async function AppsNavbar() {
           </div>
 
           <div className="flex flex-row gap-2">
-            <Link href={"/register"}>Register</Link>
-            <Link href={"/login"}>Login</Link>
+            {!data.user && (
+              <>
+                <Link href={"/register"}>Register</Link>
+                <Link href={"/login"}>Login</Link>
+              </>
+            )}
 
-            {data && (
+            {data.user && (
               <form action={signOut}>
                 <input type="submit" value="Sign Out" />
               </form>
             )}
           </div>
-
-          {/* <button onClick={handleSignOut}>Sign out</button> */}
-          {/* <LogoutButton onClick={handleSignOut} /> */}
         </div>
       </div>
     </nav>
