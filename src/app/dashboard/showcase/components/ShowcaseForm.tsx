@@ -11,6 +11,8 @@ type Inputs = {
 
 export default function ShowcaseForm({ action }: { action: any }) {
   const { pending } = useFormStatus();
+  const [state, formAction] = useFormState(action, null);
+
   const {
     register,
     handleSubmit,
@@ -18,11 +20,16 @@ export default function ShowcaseForm({ action }: { action: any }) {
     formState: { errors },
   } = useForm<Inputs>();
 
+  //   console.log(state);
+
   return (
-    <form action={action}>
-      <input name="deviceName" />
-      <input name="description" />
-      <button type="submit">{pending ? "loading..." : "Submit"}</button>;
-    </form>
+    <>
+      <p>{state}</p>
+      <form action={formAction}>
+        <input name="deviceName" />
+        <input name="description" />
+        <button type="submit">{pending ? "Loading..." : "Submit"}</button>;
+      </form>
+    </>
   );
 }

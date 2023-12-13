@@ -14,7 +14,12 @@ export default async function Page() {
 
   if (!data.user) return redirect("/dashboard");
 
-  const handleFormShowcase = async (formData: FormData) => {
+  let formServerState;
+
+  const handleFormShowcase = async (
+    prevState: any,
+    formData: { get: (arg0: string) => string }
+  ) => {
     "use server";
 
     const cookieStore = cookies();
@@ -23,19 +28,19 @@ export default async function Page() {
     const deviceName = formData.get("deviceName") as string;
     const description = formData.get("description") as string;
 
-    const { data, error } = await supabase
+    const response = await supabase
       .from("device")
       .insert({ device_name: deviceName, description: description });
 
     // if (error) redirect("register");
 
-    // console.log(data);
+    console.log(data);
     // console.log(error);
 
     console.log(deviceName);
     console.log("handle showcase is fired");
 
-    return;
+    return response;
   };
 
   return (
