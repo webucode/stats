@@ -20,16 +20,14 @@ export default function ShowcaseForm({ action }: { action: any }) {
     formState: { errors },
   } = useForm<Inputs>();
 
-  //   console.log(state);
-
   return (
-    <>
+    <div>
       <p>{state}</p>
       <form action={formAction}>
         <input name="deviceName" />
         <input name="description" />
         <button type="submit">{pending ? "Loading..." : "Submit"}</button>;
       </form>
-    </>
+    </div>
   );
 }

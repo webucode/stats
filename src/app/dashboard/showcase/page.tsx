@@ -2,8 +2,8 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
-import SubmitShowcaseButton from "./components/SubmitShowcaseButton";
 import ShowcaseForm from "./components/ShowcaseForm";
+import ListShowcase from "./components/ListShowcase";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -13,8 +13,6 @@ export default async function Page() {
   const { data } = await supabase.auth.getUser();
 
   if (!data.user) return redirect("/dashboard");
-
-  let formServerState;
 
   const handleFormShowcase = async (
     prevState: any,
@@ -28,32 +26,24 @@ export default async function Page() {
     const deviceName = formData.get("deviceName") as string;
     const description = formData.get("description") as string;
 
-    const response = await supabase
+    const { data, error, statusText } = await supabase
       .from("device")
       .insert({ device_name: deviceName, description: description });
 
-    // if (error) redirect("register");
-
-    console.log(data);
-    // console.log(error);
-
-    console.log(deviceName);
-    console.log("handle showcase is fired");
-
-    return response;
+    return statusText;
   };
+
+  const showcaseData = null;
 
   return (
     <div>
       Showcase Page
+      <div>Showcase List</div>
+      <div>
+        <ListShowcase data={showcaseData} />
+      </div>
       <div>Form Page</div>
       <div>
-        {/* <form action={handleFormShowcase}>
-          <input type="text" name="name" placeholder="Nama" />
-          <input type="text" name="description" placeholder="Description" />
-          <SubmitShowcaseButton />
-        </form> */}
-
         <ShowcaseForm action={handleFormShowcase} />
       </div>
     </div>
