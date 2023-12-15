@@ -33,14 +33,15 @@ export default async function Page() {
     return statusText;
   };
 
-  const showcaseData = null;
+  const showcaseData = await supabase.from("device").select();
+  console.log(showcaseData.data);
 
   return (
     <div>
       Showcase Page
       <div>Showcase List</div>
       <div>
-        <ListShowcase data={showcaseData} />
+        <ListShowcase data={showcaseData.data ?? []} />
       </div>
       <div>Form Page</div>
       <div>
