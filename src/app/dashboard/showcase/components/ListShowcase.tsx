@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import createClient from "@/utils/supabase/client";
 
 export default function ListShowcase({ data }: { data: any[] }) {
-  const [first, setFirst] = useState(data);
+  const [showcase, setShowcase] = useState(data);
 
   useEffect(() => {
     const channel = createClient
@@ -17,20 +17,20 @@ export default function ListShowcase({ data }: { data: any[] }) {
           table: "device",
         },
         (payload) => {
-          console.log(payload);
+          setShowcase([...showcase, payload.new]);
         }
       )
       .subscribe();
     return () => {
       createClient.removeChannel(channel);
     };
-  }, [data]);
+  }, [data, showcase]);
 
   // console.log(data);
 
   return (
     <div>
-      {data.map((item, index) => {
+      {showcase.map((item, index) => {
         return <div key={index}>a</div>;
       })}
     </div>
