@@ -17,6 +17,7 @@ export default function ListShowcase({ data }: { data: any[] }) {
           table: "device",
         },
         (payload) => {
+          console.log(payload);
           setShowcase([...showcase, payload.new]);
         }
       )
@@ -26,12 +27,10 @@ export default function ListShowcase({ data }: { data: any[] }) {
     };
   }, [data, showcase]);
 
-  // console.log(data);
-
   return (
     <div>
       {showcase.map((item, index) => {
-        return <div key={index}>a</div>;
+        return <div key={index}>{item.device_name}</div>;
       })}
     </div>
   );

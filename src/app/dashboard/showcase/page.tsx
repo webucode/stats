@@ -26,11 +26,13 @@ export default async function Page() {
     const deviceName = formData.get("deviceName") as string;
     const description = formData.get("description") as string;
 
-    const { data, error, statusText } = await supabase
+    const { error, statusText } = await supabase
       .from("device")
       .insert({ device_name: deviceName, description: description });
 
-    return statusText;
+    console.log("dibawah ini");
+
+    return { error, statusText };
   };
 
   const showcaseData = await supabase.from("device").select();
