@@ -2,8 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import createClient from "@/utils/supabase/client";
+import deleteShowcase from "../utils/deleteShowcase";
+import { cookies } from "next/headers";
 
-export default function ListShowcase({ data }: { data: any[] }) {
+export default function ListShowcase({
+  data,
+  action,
+}: {
+  data: any[];
+  action: any;
+}) {
   const [showcase, setShowcase] = useState(data);
 
   useEffect(() => {
@@ -18,7 +26,8 @@ export default function ListShowcase({ data }: { data: any[] }) {
         },
         (payload) => {
           console.log(payload);
-          setShowcase([...showcase, payload.new]);
+          payload.eventType === "INSERT" &&
+            setShowcase([...showcase, payload.new]);
         }
       )
       .subscribe();
@@ -30,7 +39,15 @@ export default function ListShowcase({ data }: { data: any[] }) {
   return (
     <div>
       {showcase.map((item, index) => {
-        return <div key={index}>{item.device_name}</div>;
+        return (
+          <div key={index}>
+            <div>{item.device_name}</div>
+            <form action={action}>
+              <input type="hidden" name="id" value={item.id} />
+              <button type="submit">delete</button>
+            </form>
+          </div>
+        );
       })}
     </div>
   );
