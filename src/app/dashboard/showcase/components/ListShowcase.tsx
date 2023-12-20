@@ -20,7 +20,7 @@ export default function ListShowcase({
       .on(
         "postgres_changes",
         {
-          event: "INSERT",
+          event: "*",
           schema: "public",
           table: "device",
         },
@@ -28,6 +28,12 @@ export default function ListShowcase({
           console.log(payload);
           payload.eventType === "INSERT" &&
             setShowcase([...showcase, payload.new]);
+
+          payload.eventType === "DELETE" &&
+            setShowcase(() => {
+              const arr = showcase.filter((item) => item.id !== payload.old.id);
+              return arr;
+            });
         }
       )
       .subscribe();
