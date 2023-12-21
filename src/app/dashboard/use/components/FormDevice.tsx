@@ -2,15 +2,14 @@
 
 import React from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { useForm, Form } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 type Inputs = {
   deviceName: string;
   description: string;
 };
 
-export default function ShowcaseForm({ action }: { action: any }) {
-  const { pending } = useFormStatus();
+export default function FormShowcase({ action }: { action: any }) {
   const [state, formAction] = useFormState(action, null);
 
   const {
@@ -21,12 +20,16 @@ export default function ShowcaseForm({ action }: { action: any }) {
     formState: { errors },
   } = useForm<Inputs>();
 
+  React.useEffect(() => {
+    state === "Created" && reset();
+  }, [state]);
+
   return (
     <div>
       <form action={formAction}>
         <input {...register("deviceName")} />
         <input {...register("description")} />
-        <button type="submit">{pending ? "Loading..." : "Submit"}</button>;
+        <button type="submit">Submit</button>;
       </form>
     </div>
   );

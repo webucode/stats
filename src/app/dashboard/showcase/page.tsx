@@ -2,16 +2,18 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
-import ShowcaseForm from "./components/ShowcaseForm";
 import ListShowcase from "./components/ListShowcase";
+import { randomUUID } from "crypto";
+import FormShowcase from "./components/FormShowcase";
 
 export default async function Page() {
+  //get cookies
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
   //get current active user
   const { data } = await supabase.auth.getUser();
-  //if not logged in di redirect to homepage
+  //if not logged in will redirect to login page
   if (!data.user) return redirect("/");
 
   const insertAction = async (
@@ -30,7 +32,7 @@ export default async function Page() {
       .from("device")
       .insert({ device_name: deviceName, description: description });
 
-    return { error, statusText };
+    return statusText + randomUUID();
   };
 
   const deleteAction = async (formData: FormData) => {
@@ -46,19 +48,17 @@ export default async function Page() {
     return { error };
   };
 
+  //Get Showcase data on server
   const showcaseData = await supabase.from("device").select();
-  console.log(showcaseData.data);
 
   return (
     <div>
       Showcase Page
-      <div>Showcase List</div>
       <div>
         <ListShowcase action={deleteAction} data={showcaseData.data ?? []} />
       </div>
-      <div>Form Page</div>
       <div>
-        <ShowcaseForm action={insertAction} />
+        <FormShowcase action={insertAction} />
       </div>
     </div>
   );
