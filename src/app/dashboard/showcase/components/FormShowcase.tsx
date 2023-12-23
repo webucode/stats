@@ -7,11 +7,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import * as z from "zod";
+import { Form } from "@/components/ui/form";
 
 const formSchema = z.object({
-  deviceName: z.string().min(2, { message: "ada a das dasda" }).max(10, {
-    message: "Username must be at least 2 characters.",
-  }),
+  deviceName: z
+    .string()
+    .min(2, { message: "Username must be at least 2 characters." }),
   description: z.string(),
 });
 
@@ -34,18 +35,29 @@ export default function FormShowcase({ action }: { action: any }) {
     state === "Created" && reset();
   }, [state]);
 
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values);
+  }
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
+
   return (
     <div>
-      <form action={formAction} onSubmit={() => console.log("on submit")}>
-        <Input {...register("deviceName", { required: true })} />
+      {/* <form action={formAction} onSubmit={() => console.log("on submit")}>
+        <input {...register("deviceName", { required: true })} />
         {errors.deviceName && (
           <p className="text-red-500">{`${errors.deviceName.message}`}</p>
         )}
-        <Input {...register("description", { required: true })} />
-        {/* <input {...register("deviceName", { required: true })} /> */}
-        {/* <input {...register("description", { required: true })} /> */}
+        <input {...register("description", { required: true })} />
+        <input {...register("deviceName", { required: true })} />
+        <input {...register("description", { required: true })} />
         <button type="submit">{isValidating ? "...Loading" : "Submit"}</button>;
-      </form>
+      </form> */}
+      <Form {...form}></Form>
     </div>
   );
 }
