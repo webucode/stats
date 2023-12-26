@@ -1,63 +1,82 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import React from "react";
-import { useFormState } from "react-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 import * as z from "zod";
-import { Form } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { addShowcase } from "../lib/showcaseAction";
+import { showcaseSchema, ShowcaseSchema } from "../lib/showcaseSchema";
 
-const formSchema = z.object({
-  deviceName: z
-    .string()
-    .min(2, { message: "Username must be at least 2 characters." }),
-  description: z.string(),
-});
+const defaultValues: Partial<ShowcaseSchema> = {
+  showcase_name: "this is device name",
+  description: "this is showcase description",
+};
 
-type TFormSchema = z.infer<typeof formSchema>;
-
-export default function FormShowcase({ action }: { action: any }) {
-  const [state, formAction] = useFormState(action, null);
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { isSubmitting, errors, isValidating },
-  } = useForm<TFormSchema>({
-    resolver: zodResolver(formSchema),
+export default function FormShowcaseZod() {
+  const form = useForm<ShowcaseSchema>({
+    resolver: zodResolver(showcaseSchema),
+    defaultValues,
   });
 
-  React.useEffect(() => {
-    state === "Created" && reset();
-  }, [state]);
+  const { isSubmitting } = form.formState;
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const onSubmit = async (data: ShowcaseSchema) => {
+    const response = await addShowcase(data);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  });
+    console.log(response);
+  };
 
   return (
     <div>
-      {/* <form action={formAction} onSubmit={() => console.log("on submit")}>
-        <input {...register("deviceName", { required: true })} />
-        {errors.deviceName && (
-          <p className="text-red-500">{`${errors.deviceName.message}`}</p>
-        )}
-        <input {...register("description", { required: true })} />
-        <input {...register("deviceName", { required: true })} />
-        <input {...register("description", { required: true })} />
-        <button type="submit">{isValidating ? "...Loading" : "Submit"}</button>;
-      </form> */}
-      <Form {...form}></Form>
+      <p>FormShowcaseZod</p>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="showcase_name"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Device Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Device Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Description" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <Button type="submit">{isSubmitting ? "Loading" : "Submit"}</Button>
+        </form>
+      </Form>
     </div>
   );
 }

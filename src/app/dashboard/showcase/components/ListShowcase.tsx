@@ -2,6 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import createClient from "@/utils/supabase/client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function ListShowcase({
   data,
@@ -44,21 +51,20 @@ export default function ListShowcase({
     <div>
       {showcase.map((item, index) => {
         return (
-          <div key={index} className="w-full">
-            <div className="flex flex-row">
-              <div className="w-16 h-16 bg-gray-500">a</div>
-              <div>
-                <div>{item.device_name}</div>
-                <div>{item.description}</div>
-              </div>
-            </div>
+          <Card key={index}>
+            <CardHeader>
+              <CardTitle>{item.device_name}</CardTitle>
+            </CardHeader>
+            <CardContent>{item.description}</CardContent>
+            <CardDescription>{item.description}</CardDescription>
+
             <div className="flex justify-end">
               <form action={action}>
                 <input type="hidden" name="id" value={item.id} />
                 <button type="submit">delete</button>
               </form>
             </div>
-          </div>
+          </Card>
         );
       })}
     </div>

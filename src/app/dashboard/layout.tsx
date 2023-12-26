@@ -8,7 +8,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
         <Link href="/dashboard/showcase">showcase</Link>
         <Link href="/dashboard/device">device </Link>
       </div>
-      <div>{children}</div>
+      <main>{children}</main>
     </div>
   );
 }

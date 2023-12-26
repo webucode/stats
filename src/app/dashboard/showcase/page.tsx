@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import ListShowcase from "./components/ListShowcase";
 import { randomUUID } from "crypto";
 import FormShowcase from "./components/FormShowcase";
+import { deleteAction } from "./lib/showcaseAction";
 
 export default async function Page() {
   //get cookies
@@ -13,40 +14,9 @@ export default async function Page() {
 
   //get current active user
   const { data } = await supabase.auth.getUser();
+
   //if not logged in will redirect to login page
   if (!data.user) return redirect("/");
-
-  const insertAction = async (
-    prevState: any,
-    formData: { get: (arg0: string) => string }
-  ) => {
-    "use server";
-
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const deviceName = formData.get("deviceName") as string;
-    const description = formData.get("description") as string;
-
-    const { error, statusText } = await supabase
-      .from("device")
-      .insert({ device_name: deviceName, description: description });
-
-    return statusText + randomUUID();
-  };
-
-  const deleteAction = async (formData: FormData) => {
-    "use server";
-
-    const id = formData.get("id") as unknown as number;
-
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const { error } = await supabase.from("device").delete().eq("id", id);
-
-    return { error };
-  };
 
   //Get Showcase data on server
   const showcaseData = await supabase.from("device").select();
@@ -58,7 +28,7 @@ export default async function Page() {
         <ListShowcase action={deleteAction} data={showcaseData.data ?? []} />
       </div>
       <div>
-        <FormShowcase action={insertAction} />
+        <FormShowcase />
       </div>
     </div>
   );
