@@ -21,8 +21,9 @@ import { addShowcase } from "../lib/showcaseAction";
 import { showcaseSchema, ShowcaseSchema } from "../lib/showcaseSchema";
 
 const defaultValues: Partial<ShowcaseSchema> = {
-  showcase_name: "this is device name",
-  description: "this is showcase description",
+  showcase_name: "",
+  description: "",
+  image: null,
 };
 
 export default function FormShowcaseZod() {
@@ -36,12 +37,11 @@ export default function FormShowcaseZod() {
   const onSubmit = async (data: ShowcaseSchema) => {
     const response = await addShowcase(data);
 
-    console.log(response);
+    response === "Created" && form.reset();
   };
 
   return (
     <div>
-      <p>FormShowcaseZod</p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
@@ -50,9 +50,9 @@ export default function FormShowcaseZod() {
             render={({ field }) => {
               return (
                 <FormItem>
-                  <FormLabel>Device Name</FormLabel>
+                  <FormLabel>Project Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Device Name" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -67,14 +67,32 @@ export default function FormShowcaseZod() {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="Description" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               );
             }}
           />
-          <Button type="submit">{isSubmitting ? "Loading" : "Submit"}</Button>
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="file" />
+                  </FormControl>
+                  <FormDescription>Recomended with 120x360 px</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <Button className="mt-3 min-w-40" type="submit">
+            {isSubmitting ? "Loading" : "Submit"}
+          </Button>
         </form>
       </Form>
     </div>

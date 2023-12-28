@@ -6,6 +6,7 @@ import ListShowcase from "./components/ListShowcase";
 import { randomUUID } from "crypto";
 import FormShowcase from "./components/FormShowcase";
 import { deleteAction } from "./lib/showcaseAction";
+import { Separator } from "@/components/ui/separator";
 
 export default async function Page() {
   //get cookies
@@ -23,10 +24,10 @@ export default async function Page() {
 
   return (
     <div>
-      Showcase Page
       <div>
         <ListShowcase action={deleteAction} data={showcaseData.data ?? []} />
       </div>
+      <Separator className="my-6" />
       <div>
         <FormShowcase />
       </div>

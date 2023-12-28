@@ -6,9 +6,13 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export default function ListShowcase({
   data,
@@ -48,22 +52,23 @@ export default function ListShowcase({
   }, [data, showcase]);
 
   return (
-    <div>
+    <div className="flex flex-col gap-5">
       {showcase.map((item, index) => {
         return (
           <Card key={index}>
             <CardHeader>
               <CardTitle>{item.device_name}</CardTitle>
             </CardHeader>
-            <CardContent>{item.description}</CardContent>
-            <CardDescription>{item.description}</CardDescription>
-
-            <div className="flex justify-end">
+            <CardContent>
+              <CardDescription>{item.description}</CardDescription>
+            </CardContent>
+            <CardFooter className="flex justify-between">
               <form action={action}>
                 <input type="hidden" name="id" value={item.id} />
-                <button type="submit">delete</button>
+                {/* <button type="submit">delete</button> */}
+                <Button>Delete</Button>
               </form>
-            </div>
+            </CardFooter>
           </Card>
         );
       })}
